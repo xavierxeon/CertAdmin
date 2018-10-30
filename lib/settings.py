@@ -22,6 +22,9 @@ class Settings(JSONSettings):
 
         super().load()       
 
+        if not self._data['certdir']:
+            self._abort('entry "certdir" is empty')
+
         os.makedirs(self.getPrivateDir(), exist_ok = True)
         os.makedirs(self.getUserDir(), exist_ok = True)
 
