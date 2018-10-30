@@ -29,24 +29,24 @@ A tool to create and maintain a certificate authority
 
 ## Execute the script
 
-* run certadmin from a command line without any commands
+* run ```certadmin``` from a command line without any commands
     
     * you will see a help text telling you what commands are available
 
-* if you run certadmin with any of the commands for the first time, a file called __certadmin.json__ will be generated and the program will stop
+* if you run ```certadmin``` with any of the commands for the first time, a file called ```certadmin.json``` will be generated and the program will stop
     
     * you need to edit this file with an editor of your choice. contents are:
-        * certdir: where you want to save your certificates
-        * names/server: the name of your webserver (e.g. www.example.com)
-        * names/ca: the name of your certificate authority file
+        * __certdir__: where you want to save your certificates
+        * __names/server__: the name of your webserver (e.g. www.example.com)
+        * __names/ca__: the name of your certificate authority file
     
-    * the following subdirectories and files will be created in CERTDIR:
-        * passwd: a file that contains the users and the passwords matching the created client certificates (user this file a as the authorization file for your webserver) 
-        * private: a directory containing the certificate and private key for both the CA and the server
-        * public: a directory containing the p12 certificates and password files for the clients
+    * the following subdirectories and files will be created in __certdir__:
+        * __passwd__: a file that contains the users and the passwords matching the created client certificates (user this file a as the authorization file for your webserver) 
+        * __private__: a directory containing the certificate and private key for both the CA and the server
+        * __public__: a directory containing the p12 certificates and password files for the clients
             * keep these files secure. zou can for exampe use gpg to distributes the certificates and passwords to your users
     
-    * if you provide your own ca file, copy it into the private folder and change the names/ca entry in the JSON file accordingly 
+    * if you provide your own ca file, copy it into the private folder and change the names/ca entry in the ```certadmin.json``` file accordingly 
 
 * after you have edited your JSON file and run certadmin (with a command)
     * the command will execute if you already have a ca file
