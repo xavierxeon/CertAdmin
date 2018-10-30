@@ -48,6 +48,6 @@ A tool to create and maintain a certificate authority
     
     * if you provide your own ca file, copy it into the private folder and change the names/ca entry in the JSON file accordingly 
 
-* after you have edited your JSON file and run certadmin for a second time (with a command)
+* after you have edited your JSON file and run certadmin (with a command)
     * the command will execute if you already have a ca file
-    * if not, a ca file will be generated (follow the onscreen instruction) nad then your command will be executed
+    * if not, a ca file will be generated (follow the onscreen instruction) and then your command will be executed
