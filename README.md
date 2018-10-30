@@ -46,7 +46,7 @@ A tool to create and maintain a certificate authority
         * __public__: a directory containing the p12 certificates and password files for the clients
             * keep these files secure. zou can for exampe use gpg to distributes the certificates and passwords to your users
     
-    * if you provide your own ca file, copy it into the private folder and change the names/ca entry in the ```certadmin.json``` file accordingly 
+    * if you provide your own ca file, copy it into the private folder and change the __names/ca__ entry in the ```certadmin.json``` file accordingly 
 
 * after you have edited your JSON file and run certadmin (with a command)
     * the command will execute if you already have a ca file
