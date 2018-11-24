@@ -22,7 +22,7 @@ class Settings(JSONSettings):
 
         super().load()       
 
-        if not self._data['certdir']:
+        if not self.data['certdir']:
             self._abort('entry "certdir" is empty')
 
         os.makedirs(self.getPrivateDir(), exist_ok = True)
@@ -31,26 +31,26 @@ class Settings(JSONSettings):
 
     def getPrivateDir(self):
 
-        name = '{0}/private'.format(self._data['certdir'])
+        name = '{0}/private'.format(self.data['certdir'])
         return name
 
     def getUserDir(self):
 
-        name = '{0}/users'.format(self._data['certdir'])
+        name = '{0}/users'.format(self.data['certdir'])
         return name        
     
     def getServerName(self):
 
-        name = self._data['names']['server']
+        name = self.data['names']['server']
         return name
 
     def getCAName(self):
 
-        name = self._data['names']['ca']
+        name = self.data['names']['ca']
         return name
 
     def getPasswordFileName(self):
 
-        name = '{0}/passwd'.format(self._data['certdir'])
+        name = '{0}/passwd'.format(self.data['certdir'])
         return name
 
