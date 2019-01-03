@@ -24,7 +24,7 @@ class CertCA(CertBase):
 
         newcert.set_issuer(newcert.get_subject())
         
-        newcert.sign(self.key, self.cryptAlgorithm)
+        newcert.sign(self.key, CertBase.cryptAlgorithm)
 
         self.cert = newcert            
         self.saveCert()

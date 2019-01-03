@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+
+import os, sys, random
+
+try:
+    import string, getpass
+    from OpenSSL import crypto    
+    from wapy.tools import Console
+except ModuleNotFoundError: #pylint: disable=E0602
+    print('modules not found, please run "setup.sh"')
+    sys.exit()
+
+class SelfSignedCert:
+
+    secondsPerDay = 24 * 60 + 60
+    cryptAlgorithm = 'sha256'  
+
+    def __init__(self):
+        
+        self.certname = None
+        self.password = None
+        self.key = None
+        self.request = None
+        self.cert = None
+
+    def create(self):
+
+        self._compileCertName()
+        if not self._compilePassword():
+            sys.exit()
+
+        print('hello', self.certname, self.password)    
+
+        self._createKey()
+        self._createRequest()
+        self._createCert()
+
+        self._save()
+
+    def _compileCertName(self):
+        
+        if(self.certname):
+            return
+
+        print(Console.blue('set certificate name ') + Console.grey('(empty will use "') + getpass.getuser() + Console.grey('"): '), end = '')
+        self.certname = input()
+        if not self.certname:
+            self.certname = getpass.getuser()
+
+    def _compilePassword(self):
+
+        if self.password:
+            return True
+
+        print(Console.blue('set password ') + Console.grey('(empty will generate random password): '), end = '')
+        password1 = getpass.getpass(prompt='')
+        if not password1:
+            self.password = str()
+            for _ in range(20):
+                self.password += random.choice(string.ascii_letters + string.digits)
+            print(Console.magenta('generated random password'))
+            return True
+
+        print(Console.blue('confirm password: '), end = '')
+        password2 = getpass.getpass(prompt='')
+        if password1 == password2:
+            self.password = password1
+            return True
+
+        print(Console.red('passwords do not match'))
+        return False
+
+    def _createKey(self):
+        
+        if self.key:
+            return
+
+        self.key = crypto.PKey()
+        self.key.generate_key(crypto.TYPE_RSA, 2048)
+
+    def _createRequest(self):
+
+        if self.request:
+            return
+
+        self.request = crypto.X509Req()
+        subj = self.request.get_subject()
+        subj.commonName = self.certname
+        self.request.set_pubkey(self.key)
+        self.request.sign(self.key, SelfSignedCert.cryptAlgorithm)            
+
+    def _createCert(self):
+
+        if self.cert:
+            return
+
+        self.cert = crypto.X509()
+        self.cert.set_version(2)
+        self.cert.set_serial_number(1)
+        self.cert.set_pubkey(self.key)        
+
+        self.cert.gmtime_adj_notBefore(0)
+        self.cert.gmtime_adj_notAfter(10 * 365 * SelfSignedCert.secondsPerDay)
+
+        subj = self.cert.get_subject()
+        subj.commonName = self.request.get_subject().commonName       
+
+        self.cert.add_extensions([
+            crypto.X509Extension(b'subjectKeyIdentifier', False, b'hash', subject = self.cert),
+            crypto.X509Extension(b'basicConstraints', False, b'CA:FALSE'),
+            crypto.X509Extension(b'authorityKeyIdentifier', False, b'issuer:always', issuer=self.cert),
+        ])
+        
+        self.cert.set_issuer(self.request.get_subject())
+        self.cert.sign(self.key, SelfSignedCert.cryptAlgorithm)
+
+    def _save(self):
+
+        if self.password:
+            with open(self.certname + '.pwd.txt', 'w') as pwdFile:
+                pwdFile.write(self.password)
+
+        if self.key:
+            keyContent = crypto.dump_privatekey(crypto.FILETYPE_PEM, self.key).decode()
+            with open(self.certname + '.key', 'w') as keyFile:
+                keyFile.write(keyContent)
+
+        if self.request:
+            reqContent = crypto.dump_certificate_request(crypto.FILETYPE_PEM, self.request).decode()
+            with open(self.certname + '.req', 'w') as reqFile:
+                reqFile.write(reqContent)
+
+        if self.cert:
+            certContent = crypto.dump_certificate(crypto.FILETYPE_PEM, self.cert).decode()
+            with open(self.certname + '.crt', 'w') as certFile:
+                certFile.write(certContent)
+
+if __name__ == '__main__':
+
+    cert = SelfSignedCert()
+    cert.create()
