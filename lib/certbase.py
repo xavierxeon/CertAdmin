@@ -10,8 +10,7 @@ class CertBase:
         pass
         
     secondsPerDay = 24 * 60 + 60
-    crptAlgorithm = 'sha256'
-    
+    cryptAlgorithm = 'sha256'    
 
     def __init__(self, baseName):
 

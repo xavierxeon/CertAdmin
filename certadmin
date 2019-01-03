@@ -7,7 +7,7 @@ try:
     from wapy.tools import Console, JSONSettings
 except ModuleNotFoundError: #pylint: disable=E0602
     print('modules not found, please run "setup.sh"')
-    quit()
+    sys.exit()
 
 class CertAdmin:
 
@@ -21,7 +21,7 @@ class CertAdmin:
             self.settings.load()
         except JSONSettings.SettingsError as e:
             print(e)
-            quit()
+            sys.exit()
 
         self.certCA = CertCA.loadOrCreate(self.settings)
 
@@ -79,7 +79,7 @@ def main():
     
     if len(sys.argv) < 2:    
         CertAdmin.printHelp()
-        quit()
+        sys.exit()
     else:  
         command = sys.argv[1]
 

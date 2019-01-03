@@ -33,7 +33,7 @@ class CertUser(CertBase):
         ])
         
         newcert.set_issuer(self.certCA.cert.get_subject())
-        newcert.sign(self.certCA.key, self.crptAlgorithm)
+        newcert.sign(self.certCA.key, self.cryptAlgorithm)
 
         self.cert = newcert            
 
@@ -65,7 +65,7 @@ class CertUser(CertBase):
         subj = req.get_subject()
         subj.commonName = self.name
         req.set_pubkey(reqkey)
-        req.sign(reqkey, self.crptAlgorithm)
+        req.sign(reqkey, self.cryptAlgorithm)
 
         return req
 
