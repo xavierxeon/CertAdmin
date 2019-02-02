@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os, json
-from wapy.tools import Console, JSONSettings
+from xxpystuff.tools import Console, JSONSettings
 
 class Settings(JSONSettings):
 

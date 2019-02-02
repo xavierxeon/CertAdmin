@@ -8,7 +8,7 @@ from PySide2.QtGui import QGuiApplication
 from PySide2.QtQml import QQmlApplicationEngine 
 # pylint: enable=E0611
 
-from wapy.tools import JSONSettings
+from xxpystuff.tools import JSONSettings
 
 from ..settings import Settings
 from ..certca import CertCA

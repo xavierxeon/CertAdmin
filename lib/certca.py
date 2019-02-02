@@ -3,7 +3,7 @@
 import os, binascii
 
 from OpenSSL import crypto
-from wapy.tools import Console
+from xxpystuff.tools import Console
 from .certbase import CertBase
 from .settings import Settings
 

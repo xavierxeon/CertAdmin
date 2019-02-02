@@ -7,7 +7,7 @@ import os
 
 from .settings import Settings
 
-from wapy.tools import Console
+from xxpystuff.tools import Console
 
 class UserManager:
 

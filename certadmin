@@ -4,7 +4,7 @@ import os, sys
 try:
     from lib import Settings
     from lib import CertBase, CertCA, CertServer, CertUser, UserManager
-    from wapy.tools import Console, JSONSettings
+    from xxpystuff.tools import Console, JSONSettings
 except ModuleNotFoundError: #pylint: disable=E0602
     print('modules not found, please run "setup.sh"')
     sys.exit()

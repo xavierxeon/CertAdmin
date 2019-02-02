@@ -5,7 +5,7 @@ import os, sys, random
 try:
     import string, getpass
     from OpenSSL import crypto    
-    from wapy.tools import Console
+    from xxpystuff.tools import Console
 except ModuleNotFoundError: #pylint: disable=E0602
     print('modules not found, please run "setup.sh"')
     sys.exit()
