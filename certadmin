@@ -72,7 +72,7 @@ class CertAdmin:
         print(Console.white('* server:') + ' create a server certificate')
         print(Console.white('* create <username>:') + ' create user certificate and grant access')
         print(Console.white('* grant <username>:') + ' grant access for given user')
-        print(Console.white('* revoke <username>:') + ' revoke access for given luser')
+        print(Console.white('* revoke <username>:') + ' revoke access for given user')
         print(Console.white('* gui:') + ' show the gui')        
 
 def main():
