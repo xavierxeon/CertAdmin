@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
-import os, sys
+import os
+import sys
 try:
     from lib import Settings
     from lib import CertBase, CertCA, CertServer, CertUser, UserManager
     from xxpystuff.tools import Console, JSONSettings
-except ModuleNotFoundError: #pylint: disable=E0602
+except ModuleNotFoundError:  # pylint: disable=E0602
     print('modules not found, please run "setup.sh"')
     sys.exit()
+
 
 class CertAdmin:
 
@@ -31,7 +33,7 @@ class CertAdmin:
         try:
             certServer.load()
             print(Console.magenta('server certificate already exists'))
-        except CertBase.LoadError: 
+        except CertBase.LoadError:
             certServer.create(self.settings.getServerName())
             print(Console.green('created server certificate'))
 
@@ -41,46 +43,55 @@ class CertAdmin:
         try:
             certUser.load()
             print(Console.magenta('user certificate already exists'))
-        except CertBase.LoadError: 
+        except CertBase.LoadError:
             certUser.create()
             print(Console.green('created user certificate'))
 
         self.addUser(name)
+
+    def renewUser(self, name):
+        certUser = CertUser(self.settings, name, self.certCA)
+        try:
+            certUser.create()
+        except CertBase.LoadError:
+            print(Console.green('user does not exist. can not renew'))
 
     def addUser(self, name):
 
         try:
             userManager = UserManager(self.settings)
             userManager.add(name)
-            print(Console.green('user {0} has now access').format(name))  
+            print(Console.green('user {0} has now access').format(name))
         except UserManager.UserError as e:
-            print(e)            
+            print(e)
 
     def removeUser(self, name):
 
         try:
             userManager = UserManager(self.settings)
             userManager.remove(name)
-            print(Console.green('user {0} has no longer access').format(name))  
+            print(Console.green('user {0} has no longer access').format(name))
         except UserManager.UserError as e:
             print(e)
 
     @staticmethod
     def printHelp():
-        
+
         print(Console.blue('certadmin'))
         print(Console.white('* server:') + ' create a server certificate')
         print(Console.white('* create <username>:') + ' create user certificate and grant access')
         print(Console.white('* grant <username>:') + ' grant access for given user')
         print(Console.white('* revoke <username>:') + ' revoke access for given user')
-        print(Console.white('* gui:') + ' show the gui')        
+        print(Console.white('* renew <username>:') + ' renew an existing user  certificate')
+        print(Console.white('* gui:') + ' show the gui')
+
 
 def main():
-    
-    if len(sys.argv) < 2:    
+
+    if len(sys.argv) < 2:
         CertAdmin.printHelp()
         sys.exit()
-    else:  
+    else:
         command = sys.argv[1]
 
     if len(sys.argv) > 2:
@@ -98,11 +109,15 @@ def main():
     elif command == 'revoke':
         certAdmin = CertAdmin()
         certAdmin.removeUser(argument)
+    elif command == 'renew':
+        certAdmin = CertAdmin()
+        certAdmin.renewUser(argument)
     elif command == 'gui':
         from lib.gui import startGui
         startGui()
     else:
         CertAdmin.printHelp()
+
 
 if __name__ == '__main__':
     main()
