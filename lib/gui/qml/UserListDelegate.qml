@@ -1,6 +1,6 @@
-import QtQuick 2.11
-import QtQuick.Layouts 1.11
-import QtQuick.Controls 1.4
+import QtQuick 
+import QtQuick.Layouts 
+import QtQuick.Controls 
 
 Item
 {

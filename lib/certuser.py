@@ -16,7 +16,6 @@ class CertUser(CertBase):
         self.password = ''
 
         self.serial = 0
-        self._readAndIncrememntSerial()
 
     def create(self):
 
@@ -24,6 +23,7 @@ class CertUser(CertBase):
         req = self._createRequest()
         self.key = req.get_pubkey()
        
+        self._readAndIncrememntSerial()
         newcert = self.generateCert(self.name, 2, self.serial)
 
         newcert.add_extensions([
