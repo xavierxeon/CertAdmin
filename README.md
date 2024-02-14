@@ -6,7 +6,7 @@ A tool to create and maintain a certificate authority
 * create a self-signed openssl authority certificate (if you do not have one)
 * form this CA: create a certificate you can use for your webserver 
 * form this CA: create client PKC12 certificates and passwords you can distribute to the users of your webservice
-* be used purely as acommand line tool, but it also provides a gui (written in pyside2 and QML)
+* be used purely as acommand line tool, but it also provides a gui (written in PySide6 and QML)
 
 ## This tool does not:
 

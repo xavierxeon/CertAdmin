@@ -1,112 +1,113 @@
 #!/user/bin/env python3
 
 import os
-# pylint: disable=E0611
-from PySide2.QtCore import Qt, QByteArray, QAbstractListModel
-# pylint: enable=E0611
+
+from PySide6.QtCore import Qt, QByteArray, QAbstractListModel
+
 
 from ..settings import Settings
 from ..usermanager import UserManager
 
+
 class UserData:
 
-    def __init__(self, name, active):
+   def __init__(self, name, active):
 
-        self.name = name
-        self.active = active
+      self.name = name
+      self.active = active
+
 
 class UserModel(QAbstractListModel):
 
-    RoleName = Qt.UserRole + 1
-    RoleActive = Qt.UserRole + 2
+   RoleName = Qt.UserRole + 1
+   RoleActive = Qt.UserRole + 2
 
-    def __init__(self, settings):
+   def __init__(self, settings):
 
-        QAbstractListModel.__init__(self)
-        self.settings = settings
+      QAbstractListModel.__init__(self)
+      self.settings = settings
 
-        self._data = []
-        self.load()
+      self._data = []
+      self.load()
 
-    def __del__(self):
+   def __del__(self):
 
-        self._save()
+      self._save()
 
-    def roleNames(self):
+   def roleNames(self):
 
-        roles = {
-            UserModel.RoleName: QByteArray(b'name')
-            , UserModel.RoleActive: QByteArray(b'active')  
-        }
+      roles = {
+          UserModel.RoleName: QByteArray(b'name'), UserModel.RoleActive: QByteArray(b'active')
+      }
 
-        return roles
+      return roles
 
-    def rowCount(self, index):
+   def rowCount(self, index):
 
-        rowCount = len(self._data)
-        return rowCount
+      rowCount = len(self._data)
+      return rowCount
 
-    def data(self, index, role):
+   def data(self, index, role):
 
-        if not index.isValid():
-            return None
+      if not index.isValid():
+         return None
 
-        row = index.row()
-        if row > len(self._data):
-            return None
+      row = index.row()
+      if row > len(self._data):
+         return None
 
-        data = self._data[row]
-        if role == UserModel.RoleName:
-            return data.name
-        elif role == UserModel.RoleActive:
-            return data.active
-        
-        return None
+      data = self._data[row]
+      if role == UserModel.RoleName:
+         return data.name
+      elif role == UserModel.RoleActive:
+         return data.active
 
-    def setData(self, index, value, role):
+      return None
 
-        if not index.isValid():
-            return False
+   def setData(self, index, value, role):
 
-        row = index.row()
-        if row > len(self._data):
-            return False
+      if not index.isValid():
+         return False
 
-        data = self._data[row]
-        if role == UserModel.RoleActive:
-            data.active = value
-            return True
-        
-        return False
+      row = index.row()
+      if row > len(self._data):
+         return False
 
-    def saveAndClear(self):
+      data = self._data[row]
+      if role == UserModel.RoleActive:
+         data.active = value
+         return True
 
-        self.beginResetModel()
-        self._save()
-        self._data.clear()
-        self.endResetModel()    
+      return False
 
-    def load(self):
+   def saveAndClear(self):
 
-        self.beginResetModel()
+      self.beginResetModel()
+      self._save()
+      self._data.clear()
+      self.endResetModel()
 
-        self._data.clear()
+   def load(self):
 
-        certList = UserManager.readCertList(self.settings)
-        userList = UserManager.readUserList(self.settings)
-        
-        for name in certList:
-            self._data.append(UserData(name, name in userList))
+      self.beginResetModel()
 
-        self.endResetModel()                
+      self._data.clear()
 
-    def _save(self):
+      certList = UserManager.readCertList(self.settings)
+      userList = UserManager.readUserList(self.settings)
 
-        userList = list()
+      for name in certList:
+         self._data.append(UserData(name, name in userList))
 
-        for userData in self._data:
-            if not userData.active:
-                continue
-            userList.append(userData.name)
+      self.endResetModel()
 
-        UserManager.writeUserList(self.settings, userList)            
+   def _save(self):
+
+      userList = list()
+
+      for userData in self._data:
+         if not userData.active:
+            continue
+         userList.append(userData.name)
+
+      UserManager.writeUserList(self.settings, userList)
